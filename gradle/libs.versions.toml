@@ -1,0 +1,16 @@
+[versions]
+agp = "8.8.0"
+leanback = "1.0.0"
+glide = "4.11.0"
+retrofit = "2.9.0"
+
+[libraries]
+androidx-leanback = { group = "androidx.leanback", name = "leanback", version.ref = "leanback" }
+androidx-leanback-support-v17 = { module = "androidx.leanback:leanback-support-v17", version.ref = "leanback" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+
