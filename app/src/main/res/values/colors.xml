@@ -10,4 +10,11 @@
     <color name="teal_200">#03DAC5</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+
+        <color name="primary">#6750A4</color>
+        <color name="on_primary">#FFFFFF</color>
+        <color name="surface_container">#1D1B20</color>
+        <color name="surface_container_high">#232127</color>
+        <color name="outline_variant">#49454F</color>
+
 </resources>

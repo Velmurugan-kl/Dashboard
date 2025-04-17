@@ -1,76 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121212">
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:background="#101010">
 
     <!-- Header with Title and Refresh Icon -->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#1F1F1F"
-        android:padding="20dp"
-        android:elevation="4dp">
+        android:layout_height="72dp"
+        android:background="#1E1E1E"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:elevation="6dp">
 
         <TextView
             android:id="@+id/appTitle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:text="Server Control"
-            android:textSize="24sp"
+            android:textSize="26sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
             android:fontFamily="sans-serif-medium" />
 
         <ImageButton
             android:id="@+id/refreshButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Refresh"
             android:src="@drawable/ic_refresh"
-            android:tint="#FFFFFF"
-            android:padding="8dp" />
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            app:tint="#FFFFFF" />
     </RelativeLayout>
 
-    <!-- Main Fragment Area -->
-    <FrameLayout
+    <!-- Replace Fragment Area with Dynamic Content -->
+    <GridLayout
         android:id="@+id/main_browse_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="80dp" />
-
-    <!-- Status Display -->
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="24dp"
-        android:background="@android:color/transparent">
+        android:layout_marginTop="100dp"
+        android:padding="16dp"
+        android:columnCount="@integer/lb_details_description_body_max_lines"
+        android:alignmentMode="alignMargins"
+        android:descendantFocusability="afterDescendants"
+
+        android:columnOrderPreserved="false"
+        tools:ignore="ExtraText">
+
+        <!-- Status and Power Controls Card -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="140dp"
+            android:layout_height="150dp"
+            android:layout_margin="5dp"
+            android:overScrollMode="ifContentScrolls"
+            android:padding="24dp"
+            android:background="@drawable/card_background"
+            android:elevation="4dp"
+            android:descendantFocusability="beforeDescendants"
+            android:clickable="false"
+        android:importantForAccessibility="yes">
 
         <TextView
             android:id="@+id/statusText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Loading..."
-            android:textSize="22sp"
+            android:textSize="10sp"
             android:textColor="#FFFFFF"
-            android:padding="12dp"
-            android:fontFamily="sans-serif" />
+            android:paddingBottom="24dp"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="sans-serif"
+            android:importantForAccessibility="yes"
+            android:contentDescription="Current server status" />
 
         <Button
             android:id="@+id/powerButton"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:text="Toggle Power"
-            android:backgroundTint="#BB86FC"
+            android:text="Power"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/power_button_color"
             android:textColor="#000000"
-            android:paddingHorizontal="20dp"
-            android:elevation="2dp" />
+            android:paddingHorizontal="2dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+            android:elevation="2dp"
+            android:importantForAccessibility="yes"
+            android:contentDescription="Power button to control the server state" />
     </LinearLayout>
+
+        <!-- Router Status and Power Controls Card -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="140dp"
+            android:layout_height="150dp"
+            android:layout_margin="5dp"
+            android:overScrollMode="ifContentScrolls"
+            android:padding="24dp"
+            android:background="@drawable/card_background"
+            android:elevation="4dp"
+            android:descendantFocusability="beforeDescendants"
+            android:clickable="false"
+            android:importantForAccessibility="yes">
+
+            <TextView
+                android:id="@+id/routerStatusText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loading..."
+                android:textSize="10sp"
+                android:textColor="#FFFFFF"
+                android:paddingBottom="24dp"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="sans-serif"
+                android:importantForAccessibility="yes"
+                android:contentDescription="Router status" />
+
+            <Button
+                android:id="@+id/routerPowerButton"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="Power"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="@color/power_button_color"
+                android:textColor="#000000"
+                android:paddingHorizontal="2dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:clickable="true"
+                android:elevation="2dp"
+                android:importantForAccessibility="yes"
+                android:contentDescription="Power button to control the router" />
+        </LinearLayout>
+
+
+
+        <!-- Ping Status Card -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="140dp"
+            android:layout_height="150dp"
+            android:layout_margin="5dp"
+            android:overScrollMode="ifContentScrolls"
+            android:padding="24dp"
+            android:background="@drawable/card_background"
+            android:elevation="4dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+
+        <TextView
+                android:id="@+id/pingStatusLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Truenas State"
+                android:textSize="18sp"
+                android:textColor="#AAAAAA"
+                android:paddingBottom="2dp"
+                android:fontFamily="sans-serif" />
+
+            <TextView
+                android:id="@+id/pingStatusText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:text="Checking..."
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:fontFamily="monospace" />
+        </LinearLayout>
+
+    </GridLayout>
+
 
 </FrameLayout>

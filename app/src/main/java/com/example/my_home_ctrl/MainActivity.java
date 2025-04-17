@@ -1,16 +1,18 @@
 package com.example.my_home_ctrl;
 import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
+import android.util.Log;
 import android.widget.Button;
-import android.widget.ImageButton;  // Change to ImageButton
+import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.leanback.app.BrowseFragment;
-
 import com.google.gson.JsonObject;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 
 import okhttp3.OkHttpClient;
 import retrofit2.*;
@@ -20,7 +22,7 @@ public class MainActivity extends Activity {
 
     private TextView statusText;
     private Button powerButton;
-    private ImageButton refreshButton;  // Change to ImageButton
+    private ImageButton refreshButton;
     private boolean isOn = false;
 
     private final OkHttpClient unsafeClient = UnsafeOkHttpClient.getUnsafeOkHttpClient();
@@ -33,12 +35,14 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_main);
 
         statusText = findViewById(R.id.statusText);
         powerButton = findViewById(R.id.powerButton);
         refreshButton = findViewById(R.id.refreshButton);
-
+        powerButton.requestFocus();
         // Retrofit + Auth setup
         String username = "root";
         String password = "vel@dell";
@@ -52,6 +56,10 @@ public class MainActivity extends Activity {
 
         api = retrofit.create(RedfishApi.class);
 
+        TextView pingStatusText = findViewById(R.id.pingStatusText);
+        checkSiteStatus("google.com", 443, pingStatusText); // Redfish default port
+        // Or replace with your desired IP/domain
+
         // Initial fetch
         fetchSystemStatus();
 
@@ -60,12 +68,16 @@ public class MainActivity extends Activity {
             @Override
             public void run() {
                 fetchSystemStatus();
-                handler.postDelayed(this, 3000); // 3 sec
+                handler.postDelayed(this, 30000); // 30 sec
             }
         }, 30000);
 
         // Manual refresh
-        refreshButton.setOnClickListener(v -> fetchSystemStatus());
+        refreshButton.setOnClickListener(v -> {
+            fetchSystemStatus();
+            checkSiteStatus("10.0.1.1", 443, pingStatusText); // Redfish default port
+            // Or use any domain/IP you want to monitor
+        });
 
         // Power button
         powerButton.setOnClickListener(v -> {
@@ -79,10 +91,10 @@ public class MainActivity extends Activity {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     if (response.isSuccessful()) {
-                        statusText.setText("Power command sent: " + action);
+                        statusText.setText("Power : " + action);
                         fetchSystemStatus(); // Refresh after action
                     } else {
-                        statusText.setText("Failed to send command: " + response.code());
+                        statusText.setText("Command Failed : " + response.code());
                     }
                 }
 
@@ -92,12 +104,6 @@ public class MainActivity extends Activity {
                 }
             });
         });
-
-        // Fragment setup
-        BrowseFragment browseFragment = new BrowseFragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.main_browse_fragment, browseFragment);
-        transaction.commit();
     }
 
     private void fetchSystemStatus() {
@@ -121,4 +127,28 @@ public class MainActivity extends Activity {
             }
         });
     }
+
+    private void checkSiteStatus(String host, int port, TextView pingStatusText) {
+        new Thread(() -> {
+            try {
+                Log.d("PingCheck", "Trying to connect to: " + host + ":" + port);
+                Socket socket = new Socket();
+                socket.connect(new InetSocketAddress(host, port), 1500);
+                socket.close();
+                runOnUiThread(() -> {
+                    pingStatusText.setText("ONLINE");
+                    pingStatusText.setTextColor(0xFF00FF00);
+                });
+            } catch (IOException e) {
+                Log.e("PingCheck", "Failed to connect to " + host + ":" + port, e);
+                runOnUiThread(() -> {
+                    pingStatusText.setText("OFFLINE");
+                    pingStatusText.setTextColor(0xFFFF4444);
+                });
+            }
+        }).start();
+    }
+
+
+
 }
