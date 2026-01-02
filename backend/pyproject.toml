@@ -1,15 +1,9 @@
-[project]
-name = "backend"
-version = "0.1.0"
-description = "Backend code for dashboard"
-authors = [
-    {name = "Velmurugan-kl",email = "velmuruganabr@gmail.com"}
-]
-requires-python = ">=3.11"
-dependencies = [
-]
-
 [tool.poetry]
+name = "dashboard"
+version = "0.1.0"
+description = ""
+authors = ["Soliton"]
+readme = "README.md"
 package-mode = false
 
 [build-system]
